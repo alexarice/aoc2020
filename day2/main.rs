@@ -17,7 +17,7 @@ fn main() {
 	let lower : usize = (&cap[1]).parse().unwrap();
 	let upper : usize = (&cap[2]).parse().unwrap();
 	let character : char = (&cap[3]).parse().unwrap();
-	let c = (&cap[4]).chars().filter(|x| x == &character).count();
+	let c = (&cap[4]).chars().filter(|&x| x == character).count();
 	if c >= lower && c <= upper {
 	    counter += 1;
 	}
