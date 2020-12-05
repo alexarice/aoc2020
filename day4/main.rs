@@ -34,17 +34,17 @@ fn main() {
 	    } else { false }
 	}
     };
-    let hasbry = number_check(Regex::new(r"byr:(\d{4})").unwrap(),1920,2002);
-    let hasiyr = number_check(Regex::new(r"iyr:(\d{4})").unwrap(),2010,2020);
-    let haseyr = number_check(Regex::new(r"eyr:(\d{4})").unwrap(),2020,2030);
-    let hashgtcm = number_check(Regex::new(r"hgt:(\d{3})cm").unwrap(),150,193);
-    let hashgtin = number_check(Regex::new(r"hgt:(\d{2})in").unwrap(),59,76);
+    let hasbry = number_check(Regex::new(r"byr:(\d{4})(?:\s|$)").unwrap(),1920,2002);
+    let hasiyr = number_check(Regex::new(r"iyr:(\d{4})(?:\s|$)").unwrap(),2010,2020);
+    let haseyr = number_check(Regex::new(r"eyr:(\d{4})(?:\s|$)").unwrap(),2020,2030);
+    let hashgtcm = number_check(Regex::new(r"hgt:(\d{3})cm(?:\s|$)").unwrap(),150,193);
+    let hashgtin = number_check(Regex::new(r"hgt:(\d{2})in(?:\s|$)").unwrap(),59,76);
     let hashgt = |x| {hashgtcm(x) || hashgtin(x)};
-    let rehcl = Regex::new(r"hcl:#[a-f0-9]{6}").unwrap();
+    let rehcl = Regex::new(r"hcl:#[a-f0-9]{6}(?:\s|$)").unwrap();
     let hashcl = |x| rehcl.is_match(x);
-    let reecl = Regex::new(r"ecl:(?:amb|blu|brn|gry|grn|hzl|oth)").unwrap();
+    let reecl = Regex::new(r"ecl:(?:amb|blu|brn|gry|grn|hzl|oth)(?:\s|$)").unwrap();
     let hasecl = |x| reecl.is_match(x);
-    let repid = Regex::new(r"pid:\d{9}").unwrap();
+    let repid = Regex::new(r"pid:\d{9}(?:\s|$)").unwrap();
     let haspid = |x| repid.is_match(x);
 
     let isvalid = |x| {hasbry(x) && hasiyr(x) && haseyr(x) && hashgt(x) && hashcl(x) && hasecl(x) && haspid(x)};
