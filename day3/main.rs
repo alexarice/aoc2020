@@ -9,15 +9,13 @@ fn main() {
     let height = lines().count();
     let width = lines().next().unwrap().len();
 
-    let raw : Vec<_> = input.bytes().filter(|x| *x == b'.' || *x == b'#').map(|x| x == b'#').collect();
-
-
+    let raw : Vec<_> = input.chars().filter_map(|x| if x == '.' {Some(false)} else if x == '#' {Some(true)} else {None}).collect();
 
     assert!(raw.len() == height * width);
 
     let get_pos = |x,y| x + y * width;
 
-    let find_trees = |&right : &usize ,&down : &usize| {
+    let find_trees = |right : usize ,down : usize| {
 	let (mut x, mut y) = (0,0);
 	let mut trees : u32 = 0;
 
@@ -35,8 +33,10 @@ fn main() {
 	return trees;
     };
 
-    let directions : [(usize,usize);5] = [(1,1),(3,1),(5,1),(7,1),(1,2)];
+    println!("Part 1: {}", find_trees(3,1));
 
-    let product : u32 = directions.iter().map(|(x,y)| find_trees(x,y)).product();
-    println!("{}",product);
+    let directions : [(usize,usize);5] = [(1,1),(3,1),(5,1),(7,1),(1,2)];
+    let product : u32 = directions.iter().map(|&(x,y)| find_trees(x,y)).product();
+
+    println!("Part 2: {}",product);
 }
