@@ -6,27 +6,25 @@ fn main() {
 
     let numbers : Vec<i32> = input.split("\n").filter(|x| x.len() > 0).map(|x| x.parse().expect("Parsing failed")).collect();
 
-    for (index, i) in numbers.iter().enumerate() {
-	for j in &numbers[(index + 1)..] {
-	    if i + j == 2020 {
-		println!("{} * {} = {}",i,j,i*j);
+    let len = numbers.len();
+
+    for i in 0 .. len {
+	for j in i + 1 .. len {
+	    let (ni,nj) = (numbers[i],numbers[j]);
+	    if ni + nj == 2020 {
+		println!("{} * {} = {}",ni,nj,ni*nj);
 	    }
 	}
     }
 
-    for (index1, i) in numbers.iter().enumerate() {
-	for (index2, j) in (&numbers[(index1 + 1)..]).iter().enumerate() {
-	    for k in &numbers[(index1 + index2 + 2)..] {
-		if i + j + k == 2020 {
-		    println!("{} * {} * {} = {}",i,j,k,i*j*k);
+    for i in 0 .. len {
+	for j in i + 1 .. len {
+	    for k in j + 1 .. len {
+		let (ni, nj, nk) = (numbers[i],numbers[j],numbers[k]);
+		if ni + nj + nk == 2020 {
+		    println!("{} * {} * {} = {}",ni,nj,nk,ni*nj*nk);
 		}
 	    }
 	}
     }
-
-
-
-
-
-
 }
