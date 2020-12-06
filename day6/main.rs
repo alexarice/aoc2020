@@ -1,5 +1,12 @@
 use std::fs;
 
+fn contains<U>(s : Option<U>, x: U) -> bool where U: PartialEq {
+    match s {
+	Some(c) => {c == x}
+	None => {false}
+    }
+}
+
 fn main() {
     let input = fs::read_to_string("input.txt")
 	.expect("Something went wrong reading the file");
@@ -21,25 +28,17 @@ fn main() {
 	let people = x.trim().lines().count();
 	let mut s : Vec<_> = x.chars().filter(|c| !c.is_whitespace()).collect();
 	s.sort();
-	let mut last = ' ';
-	let mut count = 0;
 	let mut yes = 0;
 
-	for x in s {
-	    if x == last {
+	while let Some(c) = s.pop() {
+	    let mut count = 1;
+	    while contains(s.last(),&c) {
 		count += 1;
+		s.pop();
 	    }
-	    else {
-		last = x;
-		if count >= people {
-		    yes += 1;
-		}
-		count = 1;
-	    }
+	    if count >= people {yes += 1}
 	}
-	if count >= people {
-	    yes += 1;
-	}
+
 	yes
     };
 
