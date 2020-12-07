@@ -25,7 +25,7 @@ fn main() {
 	}
     }
 
-    println!("{}",count);
+    println!("Part 1: {}",count);
 
     let number_check = move |reg : Regex,low,high| {
 	move |x| {
@@ -49,17 +49,8 @@ fn main() {
 
     let isvalid = |x| {hasbry(x) && hasiyr(x) && haseyr(x) && hashgt(x) && hashcl(x) && hasecl(x) && haspid(x)};
 
-    for x in passports() {
-	println!("{},{},{},{},{},{},{},{}",hasbry(x) , hasiyr(x) , haseyr(x) , hashgt(x) , hashcl(x) , hasecl(x) , haspid(x), isvalid(x));
-    }
-
     let valid = || passports().filter(|x| isvalid(x));
     let count2 = valid().count();
-    for x in valid() {
-	println!("{}\n",x);
 
-    }
-
-    println!("{}",count2);
-    // Doesn't actually work. Gives one too many but I have no idea why
+    println!("Part 2: {}",count2)
 }
