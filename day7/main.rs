@@ -1,31 +1,13 @@
-#[macro_use]
 extern crate nom;
 
 use nom::{
     IResult,
-    branch::{
-	alt
-    },
-    character::complete::{
-	digit1
-    },
-    bytes::complete::{
-	take_until,
-	tag
-    },
-    combinator::{
-	opt,
-	map,
-	map_res
-    },
-    multi::{
-	separated_list1
-    },
-    sequence::{
-	terminated,
-	pair,
-	separated_pair
-    }
+    branch::*,
+    character::complete::*,
+    bytes::complete::*,
+    combinator::*,
+    multi::*,
+    sequence::*
 };
 use std::fs;
 use std::collections::HashMap;
