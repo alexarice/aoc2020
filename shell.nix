@@ -7,5 +7,6 @@ mkShell {
   buildInputs = [
     cargo
     rustc
+    rustfmt
   ];
 }
