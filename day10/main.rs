@@ -16,13 +16,13 @@ fn main() {
     let mut one_diff = 0;
     let mut three_diff = 0;
 
-    for x in &adapters {
+    for &x in &adapters {
         match x - last {
             1 => one_diff += 1,
             3 => three_diff += 1,
             _ => (),
         }
-        last = *x;
+        last = x;
     }
     three_diff += 1;
 
