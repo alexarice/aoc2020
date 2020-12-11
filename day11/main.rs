@@ -1,4 +1,5 @@
 use std::fs;
+use ndarray::Array;
 
 #[derive (Clone, Copy,PartialEq)]
 enum Seat {
@@ -17,15 +18,7 @@ fn main() {
     let height = lines().count();
     let width = lines().next().unwrap().len();
 
-    // let printseat = |x| {
-    // 	match x {
-    // 	    Occupied => '#',
-    // 	    Empty => 'L',
-    // 	    Floor => '.'
-    // 	}
-    // };
-
-    let seats: Vec<_> = input
+    let seats = Array::from_shape_vec((height,width),input
         .chars()
         .filter_map(|x| {
             if x == '.' {
@@ -36,9 +29,15 @@ fn main() {
                 None
             }
         })
-        .collect();
+        .collect()).unwrap();
 
-    let get_pos = |x , y| x + y * width;
+    let add_coord = |[i,j] : [usize;2], [a,b]:[isize;2]| {
+	let x = (i as isize) + a;
+	let y = (j as isize) + b;
+	if x >= 0 && (x as usize) < height && y >= 0 && (y as usize) < width {
+	    Some([x as usize,y as usize])
+	} else { None }
+    };
 
     let mut seats1 = &mut (seats.clone());
     let mut seats2 = &mut (seats.clone());
@@ -49,27 +48,23 @@ fn main() {
 	changed = false;
 	for i in 0..height {
 	    for j in 0..width {
-		let current = seats1[get_pos(j,i)];
+		let current = seats1[[i,j]];
 		if current == Floor {
 		    continue;
 		}
-		let occupied = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)].iter().map(|(x,y)| {
-		    let a = (j as isize) + x;
-		    let b = (i as isize) + y;
-		    if a >= 0 && (a as usize) < width && b >= 0 && (b as usize) < height {
-			Some(seats1[get_pos(a as usize,b as usize)])
-		    } else { None }
+		let occupied = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)].iter().map(|&(x,y)| {
+		    add_coord([i,j],[x,y]).map(|z| seats1[z])
 		}).filter(|&z| z == Some(Occupied)).count();
 		if current == Empty && occupied == 0 {
-		    seats2[get_pos(j,i)] = Occupied;
+		    seats2[[i,j]] = Occupied;
 		    changed = true;
 		}
 		else if current == Occupied && occupied >= 4 {
-		    seats2[get_pos(j,i)] = Empty;
+		    seats2[[i,j]] = Empty;
 		    changed = true;
 		}
 		else {
-		    seats2[get_pos(j,i)] = current;
+		    seats2[[i,j]] = current;
 		}
 	    }
 	}
@@ -91,31 +86,27 @@ fn main() {
 	changed = false;
 	for i in 0..height {
 	    for j in 0..width {
-		let current = seats1[get_pos(j,i)];
+		let current = seats1[[i,j]];
 		if current == Floor {
 		    continue;
 		}
-		let occupied = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)].iter().map(|(x,y)| {
-		    let mut a = (j as isize) + x;
-		    let mut b = (i as isize) + y;
-		    while a >= 0 && (a as usize) < width && b >= 0 && (b as usize) < height && seats1[get_pos(a as usize,b as usize)] == Floor {
-			a += x;
-			b += y;
+		let occupied = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)].iter().map(|&(x,y)| {
+		    let mut c = add_coord([i,j],[x,y]);
+		    while c.map(|z| seats1[z]) == Some(Floor) {
+			c = c.and_then(|z| add_coord(z,[x,y]))
 		    }
-		    if a >= 0 && (a as usize) < width && b >= 0 && (b as usize) < height {
-			Some(seats1[get_pos(a as usize,b as usize)])
-		    } else { None }
+		    c.map(|z| seats1[z])
 		}).filter(|&z| z == Some(Occupied)).count();
 		if current == Empty && occupied == 0 {
-		    seats2[get_pos(j,i)] = Occupied;
+		    seats2[[i,j]] = Occupied;
 		    changed = true;
 		}
 		else if current == Occupied && occupied >= 5 {
-		    seats2[get_pos(j,i)] = Empty;
+		    seats2[[i,j]] = Empty;
 		    changed = true;
 		}
 		else {
-		    seats2[get_pos(j,i)] = current;
+		    seats2[[i,j]] = current;
 		}
 	    }
 	}
