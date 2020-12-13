@@ -1,6 +1,4 @@
 use std::fs;
-
-extern crate num;
 use num::Integer;
 
 fn main() {
