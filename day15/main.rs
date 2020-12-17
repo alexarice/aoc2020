@@ -23,10 +23,6 @@ fn getnth(num: usize) -> u32 {
                 next = turn as u32 - n as u32;
             }
         }
-        print!("{} ", next);
-        if turn % 20 == 0 {
-            println!("");
-        }
     }
     next
 }
